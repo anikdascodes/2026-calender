@@ -25,37 +25,35 @@ function CalendarGrid({
 }) {
   const weekNames = weekdayNames();
 
-  const getEventIndicators = (day) => {
-    const indicators = [];
-    
-    // Check for schedule events
+  const getEventSummary = (day) => {
     const scheduleList = scheduleByDate[day.dateKey] || [];
-    if (scheduleList.length > 0) {
-      // Group by type and get unique types
-      const types = [...new Set(scheduleList.map(s => s.type))];
-      types.forEach(type => {
-        const style = eventTypeStyles[type];
-        if (style) {
-          indicators.push({
-            type,
-            color: style.color,
-            icon: style.icon,
-          });
-        }
-      });
+    const hasEvents = scheduleList.length > 0;
+    
+    // Group events by type
+    const eventsByType = {};
+    scheduleList.forEach(event => {
+      if (!eventsByType[event.type]) {
+        eventsByType[event.type] = [];
+      }
+      eventsByType[event.type].push(event);
+    });
+
+    // Get primary event type (priority: exam > quiz > assignment > live-class)
+    const priority = ['exam', 'quiz', 'assignment', 'milestone', 'live-class'];
+    let primaryType = null;
+    for (const type of priority) {
+      if (eventsByType[type] && eventsByType[type].length > 0) {
+        primaryType = type;
+        break;
+      }
     }
 
-    // Check for holidays
-    const holidayList = holidaysByDate[day.dateKey] || [];
-    if (holidayList.length > 0 && viewMode === "holidays") {
-      indicators.push({
-        type: "holiday",
-        color: "#ef4444",
-        icon: "🏛️",
-      });
-    }
-
-    return indicators;
+    return {
+      hasEvents,
+      eventsByType,
+      primaryType,
+      eventCount: scheduleList.length,
+    };
   };
 
   const getFirstHoliday = (day) => {
@@ -63,21 +61,25 @@ function CalendarGrid({
     return holidayList[0]?.name || "";
   };
 
-  const getFirstScheduleEvent = (day) => {
-    const scheduleList = scheduleByDate[day.dateKey] || [];
-    if (scheduleList.length === 0) return null;
-    const first = scheduleList[0];
-    return {
-      title: first.title,
-      type: first.type,
-      style: eventTypeStyles[first.type],
-    };
+  const formatEventTypeLabel = (type) => {
+    switch(type) {
+      case 'live-class': return 'Class';
+      case 'quiz': return 'Quiz';
+      case 'assignment': return 'Assign';
+      case 'exam': return 'EXAM';
+      case 'milestone': return 'Start';
+      default: return type;
+    }
   };
 
   return (
     <section className="calendar-shell" aria-label="Monthly calendar">
       <header className="calendar-header">
-        <h1>{monthLabel(viewDate)}</h1>
+        <div className="header-title-section">
+          <h1>{monthLabel(viewDate)}</h1>
+          <span className="trimester-badge">MSc T2 • Sep 2025</span>
+        </div>
+        
         <div className="header-controls">
           <div className="view-mode-toggle">
             <button
@@ -85,27 +87,29 @@ function CalendarGrid({
               onClick={() => onViewModeChange("schedule")}
               title="Show MSc Schedule"
             >
-              📚 Schedule
+              <span className="btn-icon">📚</span>
+              <span className="btn-text">Schedule</span>
             </button>
             <button
               className={`view-mode-btn ${viewMode === "holidays" ? "active" : ""}`}
               onClick={() => onViewModeChange("holidays")}
               title="Show Indian Holidays"
             >
-              🏛️ Holidays
+              <span className="btn-icon">🏛️</span>
+              <span className="btn-text">Holidays</span>
             </button>
           </div>
           
           {viewMode === "holidays" && (
             <label className="state-select-wrap">
-              <span>Indian Holidays</span>
+              <span>Region</span>
               <select
                 value={selectedStateCode}
                 onChange={(event) => onStateChange(event.target.value)}
                 disabled={!holidaysReady}
               >
                 {!holidaysReady && <option value="ALL">Loading...</option>}
-                <option value="ALL">India (National)</option>
+                <option value="ALL">All India</option>
                 {indiaStates.map((state) => (
                   <option key={state.code} value={state.code}>
                     {state.name}
@@ -115,50 +119,52 @@ function CalendarGrid({
             </label>
           )}
           
-          <div className="header-actions">
-            <button className="btn ghost trimester-btn" onClick={onGoToTrimester} title="Go to Trimester-2 Start">
-              MSc T2
+          <div className="nav-actions">
+            <button className="nav-btn trimester-btn" onClick={onGoToTrimester} title="Go to Trimester Start">
+              📅 T2
             </button>
-            <button className="btn ghost" onClick={onToday}>
+            <button className="nav-btn today-btn" onClick={onToday} title="Go to Today">
               Today
             </button>
-            <button className="btn" onClick={onPrevMonth}>
-              Prev
-            </button>
-            <button className="btn" onClick={onNextMonth}>
-              Next
-            </button>
+            <div className="month-nav">
+              <button className="nav-btn" onClick={onPrevMonth} aria-label="Previous month">
+                ‹
+              </button>
+              <button className="nav-btn" onClick={onNextMonth} aria-label="Next month">
+                ›
+              </button>
+            </div>
           </div>
         </div>
       </header>
 
       <div className="calendar-legend">
-        <span className="legend-item">
-          <span className="legend-dot" style={{ background: eventTypeStyles["live-class"].color }}></span>
-          Live Class
-        </span>
-        <span className="legend-item">
-          <span className="legend-dot" style={{ background: eventTypeStyles["quiz"].color }}></span>
-          Quiz
-        </span>
-        <span className="legend-item">
-          <span className="legend-dot" style={{ background: eventTypeStyles["assignment"].color }}></span>
-          Assignment
-        </span>
-        <span className="legend-item">
-          <span className="legend-dot" style={{ background: eventTypeStyles["exam"].color }}></span>
-          Exam
-        </span>
-        <span className="legend-item">
-          <span className="legend-dot" style={{ background: eventTypeStyles["milestone"].color }}></span>
-          Milestone
-        </span>
+        <div className="legend-item">
+          <span className="legend-dot live-class"></span>
+          <span className="legend-label">Class</span>
+        </div>
+        <div className="legend-item">
+          <span className="legend-dot quiz"></span>
+          <span className="legend-label">Quiz</span>
+        </div>
+        <div className="legend-item">
+          <span className="legend-dot assignment"></span>
+          <span className="legend-label">Assignment</span>
+        </div>
+        <div className="legend-item">
+          <span className="legend-dot exam"></span>
+          <span className="legend-label">Exam</span>
+        </div>
+        <div className="legend-item">
+          <span className="legend-dot note"></span>
+          <span className="legend-label">Note</span>
+        </div>
       </div>
 
-      <div className="weekdays" role="row">
+      <div className="weekdays-header">
         {weekNames.map((name) => (
           <div key={name} className="weekday" role="columnheader">
-            {name}
+            {name.slice(0, 3)}
           </div>
         ))}
       </div>
@@ -166,16 +172,17 @@ function CalendarGrid({
       <div className="calendar-grid" role="grid">
         {days.map((day) => {
           const noteCount = notesByDate[day.dateKey]?.length || 0;
-          const eventIndicators = getEventIndicators(day);
+          const eventSummary = getEventSummary(day);
           const firstHoliday = getFirstHoliday(day);
-          const firstSchedule = getFirstScheduleEvent(day);
+          const primaryStyle = eventSummary.primaryType ? eventTypeStyles[eventSummary.primaryType] : null;
           
           const classNames = [
             "day-cell",
-            day.inMonth ? "" : "faded",
+            day.inMonth ? "in-month" : "other-month",
             day.isToday ? "today" : "",
             selectedDateKey === day.dateKey ? "selected" : "",
-            eventIndicators.length ? "has-events" : "",
+            eventSummary.hasEvents ? "has-events" : "",
+            eventSummary.primaryType || "",
           ]
             .join(" ")
             .trim();
@@ -189,53 +196,57 @@ function CalendarGrid({
               onMouseMove={onHoverMove}
               onMouseLeave={onHoverEnd}
               type="button"
-              aria-label={`${day.dateKey}${noteCount ? `, ${noteCount} notes` : ", no notes"}${
-                eventIndicators.length ? `, ${eventIndicators.length} event types` : ""
-              }`}
             >
-              <span className="date-number">{day.dayNumber}</span>
+              <div className="day-header">
+                <span className="date-number">{day.dayNumber}</span>
+                {noteCount > 0 && (
+                  <span className="note-indicator" title={`${noteCount} note${noteCount > 1 ? 's' : ''}`}>
+                    {noteCount}
+                  </span>
+                )}
+              </div>
               
-              {/* Event indicator dots */}
-              {eventIndicators.length > 0 && (
-                <div className="event-dots">
-                  {eventIndicators.slice(0, 3).map((indicator, idx) => (
-                    <span
-                      key={idx}
-                      className="event-dot"
-                      style={{ backgroundColor: indicator.color }}
-                      title={indicator.type}
-                    >
-                      {indicator.icon}
-                    </span>
-                  ))}
-                </div>
-              )}
-
-              {/* Schedule pill (shown if schedule mode) */}
-              {viewMode === "schedule" && firstSchedule && (
-                <span 
-                  className="schedule-pill"
-                  style={{ 
-                    backgroundColor: `${firstSchedule.style.color}20`,
-                    borderColor: firstSchedule.style.color,
-                    color: firstSchedule.style.color,
-                  }}
-                  title={firstSchedule.title}
-                >
-                  {firstSchedule.style.icon} {firstSchedule.title.split(":")[0].substring(0, 12)}...
-                </span>
-              )}
-
-              {/* Holiday pill (shown if holiday mode) */}
-              {viewMode === "holidays" && firstHoliday && (
-                <span className="holiday-pill" title={firstHoliday}>
-                  {firstHoliday}
-                </span>
-              )}
-
-              <span className="note-pill">
-                {noteCount ? `${noteCount} note${noteCount > 1 ? "s" : ""}` : "No notes"}
-              </span>
+              <div className="day-content">
+                {viewMode === "schedule" && eventSummary.hasEvents && (
+                  <div className="event-badges">
+                    {eventSummary.primaryType && (
+                      <span 
+                        className={`event-badge ${eventSummary.primaryType}`}
+                        style={{ 
+                          backgroundColor: `${primaryStyle.color}20`,
+                          color: primaryStyle.color,
+                          borderColor: `${primaryStyle.color}40`,
+                        }}
+                      >
+                        {primaryStyle.icon} {formatEventTypeLabel(eventSummary.primaryType)}
+                      </span>
+                    )}
+                    {eventSummary.eventCount > 1 && (
+                      <span className="more-events">+{eventSummary.eventCount - 1}</span>
+                    )}
+                  </div>
+                )}
+                
+                {viewMode === "holidays" && firstHoliday && (
+                  <span className="holiday-badge" title={firstHoliday}>
+                    🏛️ {firstHoliday.split(' ').slice(0, 2).join(' ')}
+                  </span>
+                )}
+              </div>
+              
+              <div className="day-footer">
+                {eventSummary.hasEvents && (
+                  <div className="event-dots-row">
+                    {Object.keys(eventSummary.eventsByType).slice(0, 4).map((type, idx) => (
+                      <span 
+                        key={idx} 
+                        className="mini-dot"
+                        style={{ backgroundColor: eventTypeStyles[type]?.color || '#999' }}
+                      />
+                    ))}
+                  </div>
+                )}
+              </div>
             </button>
           );
         })}
