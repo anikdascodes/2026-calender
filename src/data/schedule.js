@@ -1,5 +1,6 @@
 // MSc Trimester-2 Calendar Data - Sep 2025 Batch
 // Filtered to show only: Artificial Neural Networks, Cloud Services & Platforms, Machine Learning
+// Week Structure: Friday (ANN+CSP) -> Saturday (ML) -> Week transitions on Saturday
 
 export const trimesterInfo = {
   name: "MSc Trimester-2",
@@ -18,10 +19,10 @@ export const courses = {
   t1Backlog: [],
 };
 
-// Week definitions: Each academic week runs FRIDAY to SATURDAY
-// Friday: ANN (6:30 PM) + CSP (9:00 PM) - Week Start
-// Saturday: ML (7:45 PM) - Week End
-// Example: Week 4 = Feb 13 (Fri) + Feb 14 (Sat)
+// Week definitions: Week transitions on SATURDAY after ML class
+// Friday: ANN + CSP (week's main classes)
+// Saturday: ML class + Week number increments
+// So "Week 5" = Feb 20 (Fri, ANN+CSP) + Feb 21 (Sat, ML)
 export const weekDefinitions = [
   { 
     weekNum: 0, 
@@ -62,7 +63,7 @@ export const weekDefinitions = [
   { 
     weekNum: 4, 
     name: "Week 4 - Quiz 1", 
-    startDate: "2026-02-08", 
+    startDate: "2026-02-13", 
     endDate: "2026-02-14",
     fridayDate: "2026-02-13",
     saturdayDate: "2026-02-14",
@@ -89,7 +90,7 @@ export const weekDefinitions = [
   { 
     weekNum: 7, 
     name: "Week 7 - Quiz 2", 
-    startDate: "2026-03-01", 
+    startDate: "2026-03-06", 
     endDate: "2026-03-07",
     fridayDate: "2026-03-06",
     saturdayDate: "2026-03-07",
@@ -107,7 +108,7 @@ export const weekDefinitions = [
   { 
     weekNum: 9, 
     name: "Week 9 - Assignment", 
-    startDate: "2026-03-15", 
+    startDate: "2026-03-20", 
     endDate: "2026-03-21",
     fridayDate: "2026-03-20",
     saturdayDate: "2026-03-21",
@@ -116,7 +117,7 @@ export const weekDefinitions = [
   { 
     weekNum: 10, 
     name: "Week 10 - Quiz 3", 
-    startDate: "2026-03-22", 
+    startDate: "2026-03-27", 
     endDate: "2026-03-28",
     fridayDate: "2026-03-27",
     saturdayDate: "2026-03-28",
@@ -196,21 +197,21 @@ export function getCurrentWeek() {
   return getWeekForDate(dateStr);
 }
 
-// Helper to check if a date is a Friday (ANN + CSP day - Week Start)
+// Check if a date is Friday (ANN + CSP day)
 export function isFridayClassDay(dateStr) {
   const week = getWeekForDate(dateStr);
   if (!week || week.weekNum < 0) return false;
   return dateStr === week.fridayDate;
 }
 
-// Helper to check if a date is a Saturday (ML day - Week End)
+// Check if a date is Saturday (ML day) - This is when week number increments
 export function isSaturdayClassDay(dateStr) {
   const week = getWeekForDate(dateStr);
   if (!week || week.weekNum < 0) return false;
   return dateStr === week.saturdayDate;
 }
 
-// Helper to get the next class dates for each course
+// Get the next class dates for each course FROM a given date
 export function getNextClassDates(fromDateStr) {
   const fromDate = new Date(fromDateStr);
   const scheduleDates = Object.keys(scheduleByDate).sort();
@@ -221,6 +222,7 @@ export function getNextClassDates(fromDateStr) {
   
   for (const dateStr of scheduleDates) {
     const date = new Date(dateStr);
+    // Include today in the search (for checking if there's class today)
     if (date < fromDate) continue;
     
     const events = scheduleByDate[dateStr];
@@ -257,6 +259,47 @@ export function getDaysUntilNextClass(fromDateStr, courseType) {
   const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
   
   return { date: targetDate, days: diffDays };
+}
+
+// Get the week status for display
+// Returns what "phase" of the week we're in
+export function getWeekStatus(dateStr) {
+  const week = getWeekForDate(dateStr);
+  if (!week || week.weekNum < 0) return null;
+  
+  const date = new Date(dateStr);
+  const dayOfWeek = date.getDay(); // 0=Sun, 1=Mon, ..., 5=Fri, 6=Sat
+  
+  // Friday = Class day (ANN + CSP)
+  if (dayOfWeek === 5) {
+    return {
+      type: 'friday',
+      icon: '🔥',
+      label: 'Friday Class Day',
+      sublabel: 'ANN 6:30 PM | CSP 9:00 PM',
+      color: '#ef4444'
+    };
+  }
+  
+  // Saturday = ML day + Week transition
+  if (dayOfWeek === 6) {
+    return {
+      type: 'saturday',
+      icon: '🎯',
+      label: 'Saturday Class Day',
+      sublabel: 'ML 7:45 PM - Week in Progress',
+      color: '#10b981'
+    };
+  }
+  
+  // Sunday-Thursday = Between classes
+  return {
+    type: 'between',
+    icon: '📚',
+    label: 'Study Period',
+    sublabel: 'Next: Friday classes',
+    color: '#3b82f6'
+  };
 }
 
 // Schedule events organized by date (YYYY-MM-DD format)
