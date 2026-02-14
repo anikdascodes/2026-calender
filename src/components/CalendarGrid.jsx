@@ -200,16 +200,20 @@ function CalendarGrid({
             >
               <div className="day-header">
                 <span className="date-number">{day.dayNumber}</span>
-                {weekInfo && weekInfo.weekNum >= 0 && (
-                  <span className="week-indicator-mini" title={weekInfo.name}>
-                    W{weekInfo.weekNum}
-                  </span>
-                )}
-                {noteCount > 0 && (
-                  <span className="note-indicator" title={`${noteCount} note${noteCount > 1 ? 's' : ''}`}>
-                    {noteCount}
-                  </span>
-                )}
+                <div className="day-indicators">
+                  {weekInfo && weekInfo.weekNum >= 0 && (
+                    <span className="week-indicator-mini" title={weekInfo.name}>
+                      W{weekInfo.weekNum}
+                    </span>
+                  )}
+                  {noteCount > 0 && (
+                    <span className="note-dots" title={`${noteCount} note${noteCount > 1 ? 's' : ''}`}>
+                      {Array.from({ length: Math.min(noteCount, 3) }).map((_, i) => (
+                        <span key={i} className="note-dot" />
+                      ))}
+                    </span>
+                  )}
+                </div>
               </div>
               
               <div className="day-content">

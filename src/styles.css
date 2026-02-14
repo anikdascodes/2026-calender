@@ -451,10 +451,31 @@ body {
   margin-bottom: var(--space-1);
 }
 
+.day-indicators {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
 .date-number {
   font-size: var(--text-sm);
   font-weight: 600;
   color: var(--color-ink);
+}
+
+/* Note dots - circular indicators like real calendars */
+.note-dots {
+  display: flex;
+  gap: 2px;
+  align-items: center;
+}
+
+.note-dot {
+  width: 6px;
+  height: 6px;
+  background: #f59e0b;
+  border-radius: 50%;
+  display: block;
 }
 
 .note-indicator {
