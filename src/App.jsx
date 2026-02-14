@@ -3,6 +3,7 @@ import CalendarGrid from "./components/CalendarGrid";
 import HoverPreview from "./components/HoverPreview";
 import NotesPanel from "./components/NotesPanel";
 import { getCalendarDays, loadNotes, newStickyNote, saveNotes, toDateKey } from "./utils/calendar";
+import { scheduleByDate, getScheduleForDate } from "./data/schedule";
 
 function App() {
   const [viewDate, setViewDate] = useState(() => {
@@ -17,6 +18,7 @@ function App() {
   const [HolidaysCtor, setHolidaysCtor] = useState(null);
   const [indiaStates, setIndiaStates] = useState([]);
   const [holidaysByDate, setHolidaysByDate] = useState({});
+  const [viewMode, setViewMode] = useState("schedule"); // 'schedule' or 'holidays'
   const [hoverState, setHoverState] = useState({
     visible: false,
     x: 0,
@@ -27,6 +29,7 @@ function App() {
   const days = useMemo(() => getCalendarDays(viewDate), [viewDate]);
   const notesForSelectedDate = notesByDate[selectedDateKey] || [];
   const holidaysForSelectedDate = holidaysByDate[selectedDateKey] || [];
+  const scheduleForSelectedDate = useMemo(() => getScheduleForDate(selectedDateKey), [selectedDateKey]);
 
   useEffect(() => {
     saveNotes(notesByDate);
@@ -169,6 +172,12 @@ function App() {
     setSearchTerm("");
   };
 
+  const goToTrimesterStart = () => {
+    setViewDate(new Date(2026, 0, 1)); // January 2026
+    setSelectedDateKey("2026-01-19");
+    setSearchTerm("");
+  };
+
   return (
     <main className="app">
       <CalendarGrid
@@ -177,13 +186,17 @@ function App() {
         selectedDateKey={selectedDateKey}
         notesByDate={notesByDate}
         holidaysByDate={holidaysByDate}
+        scheduleByDate={scheduleByDate}
         indiaStates={indiaStates}
         holidaysReady={Boolean(HolidaysCtor)}
         selectedStateCode={selectedStateCode}
+        viewMode={viewMode}
         onStateChange={setSelectedStateCode}
+        onViewModeChange={setViewMode}
         onPrevMonth={() => moveMonth(-1)}
         onNextMonth={() => moveMonth(1)}
         onToday={goToday}
+        onGoToTrimester={goToTrimesterStart}
         onSelectDate={handleSelectDate}
         onHoverStart={handleHoverStart}
         onHoverMove={handleHoverMove}
@@ -194,16 +207,24 @@ function App() {
         selectedDateKey={selectedDateKey}
         notesForSelectedDate={notesForSelectedDate}
         holidaysForSelectedDate={holidaysForSelectedDate}
+        scheduleForSelectedDate={scheduleForSelectedDate}
         noteDraft={noteDraft}
         setNoteDraft={setNoteDraft}
         searchTerm={searchTerm}
         setSearchTerm={setSearchTerm}
+        viewMode={viewMode}
         onAddNote={handleAddNote}
         onDeleteNote={handleDeleteNote}
         onClearDay={handleClearDay}
       />
 
-      <HoverPreview hoverState={hoverState} notesByDate={notesByDate} holidaysByDate={holidaysByDate} />
+      <HoverPreview 
+        hoverState={hoverState} 
+        notesByDate={notesByDate} 
+        holidaysByDate={holidaysByDate}
+        scheduleByDate={scheduleByDate}
+        viewMode={viewMode}
+      />
     </main>
   );
 }

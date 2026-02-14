@@ -53,7 +53,7 @@ body {
 
 .calendar-shell {
   display: grid;
-  grid-template-rows: auto auto 1fr;
+  grid-template-rows: auto auto auto 1fr;
   min-height: 0;
   overflow: hidden;
 }
@@ -75,6 +75,39 @@ body {
   display: flex;
   align-items: center;
   gap: 10px;
+  flex-wrap: wrap;
+}
+
+/* View Mode Toggle */
+.view-mode-toggle {
+  display: flex;
+  gap: 4px;
+  background: rgba(255, 255, 255, 0.6);
+  padding: 4px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+}
+
+.view-mode-btn {
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  font-family: inherit;
+}
+
+.view-mode-btn.active {
+  background: rgba(255, 255, 255, 0.95);
+  color: var(--ink);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+}
+
+.view-mode-btn:hover:not(.active) {
+  color: var(--ink);
 }
 
 .state-select-wrap {
@@ -113,6 +146,7 @@ body {
   padding: 8px 12px;
   font-size: clamp(0.75rem, 1.2vw, 0.92rem);
   cursor: pointer;
+  font-family: inherit;
 }
 
 .btn:hover {
@@ -123,12 +157,40 @@ body {
   background: #e8f4ef;
 }
 
+.btn.ghost.trimester-btn {
+  background: #e0e7ff;
+  border-color: #c7d2fe;
+  font-weight: 500;
+}
+
 .btn.add {
   background: #e9f8d9;
 }
 
 .btn.danger {
   background: #ffe3dc;
+}
+
+/* Calendar Legend */
+.calendar-legend {
+  display: flex;
+  gap: 12px;
+  padding: 0 clamp(12px, 1.5vw, 20px) 10px;
+  flex-wrap: wrap;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.72rem;
+  color: var(--muted);
+}
+
+.legend-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
 }
 
 .weekdays {
@@ -193,9 +255,43 @@ body {
   background: linear-gradient(160deg, rgba(255, 247, 198, 0.85), rgba(255, 255, 255, 0.8));
 }
 
+.day-cell.has-events {
+  border-color: #a5b4fc;
+}
+
 .date-number {
   font-size: clamp(0.82rem, 1.1vw, 1rem);
   font-weight: 700;
+}
+
+/* Event dots */
+.event-dots {
+  display: flex;
+  gap: 3px;
+  margin: 2px 0;
+}
+
+.event-dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 9px;
+}
+
+/* Schedule pill */
+.schedule-pill {
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: clamp(0.6rem, 0.75vw, 0.7rem);
+  border: 1px solid;
+  border-radius: 6px;
+  padding: 2px 5px;
+  margin-top: 2px;
 }
 
 .holiday-pill {
@@ -234,6 +330,95 @@ body {
   margin: 6px 0 0;
   color: var(--muted);
   font-size: clamp(0.75rem, 0.92vw, 0.9rem);
+}
+
+/* Schedule Section */
+.section-title {
+  margin: 0 0 8px 0;
+  font-size: 0.8rem;
+  color: var(--muted);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.schedule-section {
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 12px;
+  padding: 12px;
+  border: 1px solid var(--line);
+}
+
+.schedule-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.schedule-card {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 10px;
+  padding: 10px;
+  border-left: 4px solid;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.schedule-card.backlog {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(254, 243, 199, 0.3));
+}
+
+.schedule-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 4px;
+}
+
+.schedule-icon {
+  font-size: 1rem;
+}
+
+.schedule-type {
+  font-size: 0.7rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 600;
+}
+
+.schedule-weightage {
+  margin-left: auto;
+  background: rgba(239, 68, 68, 0.1);
+  color: #dc2626;
+  padding: 2px 6px;
+  border-radius: 6px;
+  font-size: 0.7rem;
+  font-weight: 600;
+}
+
+.schedule-title {
+  font-size: 0.85rem;
+  font-weight: 500;
+  line-height: 1.3;
+  margin-bottom: 4px;
+}
+
+.schedule-time {
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+.backlog-badge {
+  display: inline-block;
+  background: #fcd34d;
+  color: #92400e;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.65rem;
+  font-weight: 600;
+  margin-top: 4px;
 }
 
 .holiday-list-panel {
@@ -334,32 +519,72 @@ body {
 
 .hover-card {
   position: fixed;
-  width: min(250px, calc(100vw - 32px));
+  width: min(280px, calc(100vw - 32px));
   pointer-events: none;
   z-index: 30;
-  background: rgba(31, 43, 46, 0.94);
+  background: rgba(31, 43, 46, 0.96);
   color: #f4fbff;
   border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 10px;
-  padding: 10px 12px;
+  border-radius: 12px;
+  padding: 12px 14px;
   box-shadow: 0 10px 28px rgba(0, 0, 0, 0.3);
 }
 
 .hover-card strong {
   display: block;
-  margin-bottom: 6px;
-  font-size: 0.85rem;
+  margin-bottom: 8px;
+  font-size: 0.9rem;
+  color: #fff;
+}
+
+.preview-section {
+  margin-bottom: 8px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.preview-section:last-of-type {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.preview-section-title {
+  font-size: 0.75rem;
+  color: #94a3b8;
+  margin-bottom: 4px;
+  font-weight: 600;
 }
 
 .hover-card p {
-  margin: 4px 0 0;
-  font-size: 0.8rem;
-  line-height: 1.35;
+  margin: 3px 0 0;
+  font-size: 0.82rem;
+  line-height: 1.4;
   word-wrap: break-word;
 }
 
 .hover-card .holiday-line {
   color: #ffe391;
+}
+
+.hover-card .schedule-line {
+  color: #bfdbfe;
+}
+
+.preview-weightage {
+  color: #fca5a5;
+  font-weight: 600;
+}
+
+.preview-more {
+  color: #94a3b8 !important;
+  font-size: 0.75rem !important;
+  font-style: italic;
+}
+
+.preview-empty {
+  color: #94a3b8;
+  font-style: italic;
 }
 
 @media (max-width: 980px) {
@@ -385,6 +610,10 @@ body {
     align-items: stretch;
   }
 
+  .view-mode-toggle {
+    justify-content: center;
+  }
+
   .header-actions {
     width: 100%;
   }
@@ -395,5 +624,13 @@ body {
 
   .btn {
     flex: 1;
+  }
+
+  .calendar-legend {
+    gap: 8px;
+  }
+
+  .legend-item {
+    font-size: 0.65rem;
   }
 }
