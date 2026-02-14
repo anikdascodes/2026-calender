@@ -1,5 +1,5 @@
 import { monthLabel, weekdayNames } from "../utils/calendar";
-import { eventTypeStyles } from "../data/schedule";
+import { eventTypeStyles, getWeekForDate } from "../data/schedule";
 
 function CalendarGrid({
   viewDate,
@@ -175,6 +175,7 @@ function CalendarGrid({
           const eventSummary = getEventSummary(day);
           const firstHoliday = getFirstHoliday(day);
           const primaryStyle = eventSummary.primaryType ? eventTypeStyles[eventSummary.primaryType] : null;
+          const weekInfo = getWeekForDate(day.dateKey);
           
           const classNames = [
             "day-cell",
@@ -199,6 +200,11 @@ function CalendarGrid({
             >
               <div className="day-header">
                 <span className="date-number">{day.dayNumber}</span>
+                {weekInfo && weekInfo.weekNum >= 0 && (
+                  <span className="week-indicator-mini" title={weekInfo.name}>
+                    W{weekInfo.weekNum}
+                  </span>
+                )}
                 {noteCount > 0 && (
                   <span className="note-indicator" title={`${noteCount} note${noteCount > 1 ? 's' : ''}`}>
                     {noteCount}

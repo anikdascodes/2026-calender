@@ -2,8 +2,9 @@ import { useEffect, useMemo, useState } from "react";
 import CalendarGrid from "./components/CalendarGrid";
 import HoverPreview from "./components/HoverPreview";
 import NotesPanel from "./components/NotesPanel";
+import WeekIndicator from "./components/WeekIndicator";
 import { getCalendarDays, loadNotes, newStickyNote, saveNotes, toDateKey } from "./utils/calendar";
-import { scheduleByDate, getScheduleForDate } from "./data/schedule";
+import { scheduleByDate, getScheduleForDate, getWeekForDate, getCurrentWeek } from "./data/schedule";
 
 function App() {
   const [viewDate, setViewDate] = useState(() => {

@@ -1,5 +1,6 @@
 import { formatDateLabel } from "../utils/calendar";
 import { eventTypeStyles } from "../data/schedule";
+import WeekIndicator from "./WeekIndicator";
 
 function NotesPanel({
   selectedDateKey,
@@ -44,7 +45,10 @@ function NotesPanel({
         <p className="date-subtitle">Add notes and view your schedule</p>
       </div>
 
-      {/* Schedule Events Section */}
+      {/* Week Indicator */}
+      <WeekIndicator selectedDateKey={selectedDateKey} />
+
+      {/* Schedule Events Section -->
       {scheduleForSelectedDate.length > 0 && (
         <div className="section schedule-section">
           <div className="section-header">
