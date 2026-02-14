@@ -199,21 +199,14 @@ function CalendarGrid({
               type="button"
             >
               <div className="day-header">
-                <span className="date-number">{day.dayNumber}</span>
-                <div className="day-indicators">
-                  {weekInfo && weekInfo.weekNum >= 0 && (
-                    <span className="week-indicator-mini" title={weekInfo.name}>
-                      W{weekInfo.weekNum}
-                    </span>
-                  )}
-                  {noteCount > 0 && (
-                    <span className="note-dots" title={`${noteCount} note${noteCount > 1 ? 's' : ''}`}>
-                      {Array.from({ length: Math.min(noteCount, 3) }).map((_, i) => (
-                        <span key={i} className="note-dot" />
-                      ))}
-                    </span>
-                  )}
-                </div>
+                <span className={`date-number ${noteCount > 0 ? 'has-notes' : ''}`} title={noteCount > 0 ? `${noteCount} note${noteCount > 1 ? 's' : ''}` : ''}>
+                  {day.dayNumber}
+                </span>
+                {weekInfo && weekInfo.weekNum >= 0 && (
+                  <span className="week-indicator-mini" title={weekInfo.name}>
+                    W{weekInfo.weekNum}
+                  </span>
+                )}
               </div>
               
               <div className="day-content">
