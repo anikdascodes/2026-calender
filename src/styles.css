@@ -1247,3 +1247,102 @@ body {
     font-size: 0.65rem;
   }
 }
+
+/* ============================================
+   Week Indicator - Next Classes Section
+   ============================================ */
+.next-classes-section {
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: var(--radius-sm);
+  padding: var(--space-2);
+  margin: var(--space-2) 0;
+  border: 1px solid var(--color-line);
+}
+
+.next-classes-title {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--color-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: var(--space-2);
+}
+
+.next-classes-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-2);
+}
+
+.next-class-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: var(--space-2);
+  background: white;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-line);
+}
+
+.class-name {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--color-ink);
+}
+
+.class-days {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #059669;
+}
+
+.class-days[data-urgent="true"] {
+  color: #dc2626;
+}
+
+.class-date {
+  font-size: 0.65rem;
+  color: var(--color-muted);
+}
+
+.week-subtext {
+  font-size: var(--text-xs);
+  color: var(--color-muted);
+  font-style: italic;
+}
+
+.week-range {
+  font-size: 0.7rem;
+  color: var(--color-muted);
+  font-family: monospace;
+}
+
+/* Day type indicators on calendar */
+.day-cell.friday-class {
+  border-left: 3px solid #ef4444;
+}
+
+.day-cell.saturday-class {
+  border-left: 3px solid #10b981;
+}
+
+.day-cell .day-type-badge {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  font-size: 0.6rem;
+  padding: 2px 4px;
+  border-radius: 4px;
+  font-weight: 600;
+}
+
+.day-cell.friday-class .day-type-badge {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.day-cell.saturday-class .day-type-badge {
+  background: #d1fae5;
+  color: #065f46;
+}

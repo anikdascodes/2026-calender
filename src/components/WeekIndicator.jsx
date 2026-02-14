@@ -1,9 +1,8 @@
-import { getWeekForDate, getCurrentWeek, getDaysRemainingInWeek, isWeekConcludingDay, isWeekStartingDay, weekDefinitions } from "../data/schedule";
+import { getWeekForDate, getCurrentWeek, isFridayClassDay, isSaturdayClassDay, getNextClassDates, getDaysUntilNextClass } from "../data/schedule";
 
 function WeekIndicator({ selectedDateKey }) {
   const weekInfo = getWeekForDate(selectedDateKey);
   const currentWeek = getCurrentWeek();
-  const daysRemaining = getDaysRemainingInWeek(selectedDateKey);
   
   if (!weekInfo || weekInfo.weekNum < 0) {
     return (
@@ -15,20 +14,41 @@ function WeekIndicator({ selectedDateKey }) {
   }
 
   const isCurrentWeek = currentWeek && weekInfo.weekNum === currentWeek.weekNum;
-  const isFriday = isWeekConcludingDay(selectedDateKey);
-  const isSaturday = isWeekStartingDay(selectedDateKey);
+  const isFriday = isFridayClassDay(selectedDateKey);
+  const isSaturday = isSaturdayClassDay(selectedDateKey);
+  
+  // Get next class dates
+  const nextClasses = getNextClassDates(selectedDateKey);
+  const daysUntilANN = getDaysUntilNextClass(selectedDateKey, 'nextANN');
+  const daysUntilCSP = getDaysUntilNextClass(selectedDateKey, 'nextCSP');
+  const daysUntilML = getDaysUntilNextClass(selectedDateKey, 'nextML');
   
   let statusBadge = null;
   if (isFriday) {
-    statusBadge = { icon: "🔥", text: "Week Concluding", color: "#ef4444" };
+    statusBadge = { 
+      icon: "🔥", 
+      text: "Friday Class Day (ANN + CSP)", 
+      color: "#ef4444",
+      subtext: "6:30 PM ANN | 9:00 PM CSP"
+    };
   } else if (isSaturday) {
-    statusBadge = { icon: "🚀", text: "Week Starting", color: "#10b981" };
+    statusBadge = { 
+      icon: "🎯", 
+      text: "Saturday Class Day (ML)", 
+      color: "#10b981",
+      subtext: "7:45 PM ML - Week Concludes"
+    };
   } else if (isCurrentWeek) {
-    statusBadge = { icon: "📍", text: "Current Week", color: "#3b82f6" };
+    statusBadge = { 
+      icon: "📍", 
+      text: "Current Week", 
+      color: "#3b82f6",
+      subtext: weekInfo.description
+    };
   }
 
   // Calculate progress through trimester
-  const totalWeeks = weekDefinitions.length;
+  const totalWeeks = 15; // Week 0-14
   const progressPercent = Math.round((weekInfo.weekNum / (totalWeeks - 1)) * 100);
 
   return (
@@ -39,7 +59,7 @@ function WeekIndicator({ selectedDateKey }) {
           {statusBadge && (
             <span 
               className="week-status-badge" 
-              style={{ backgroundColor: `${statusBadge.color}20`, color: statusBadge.color }}
+              style={{ backgroundColor: `${statusBadge.color}20`, color: statusBadge.color, borderColor: `${statusBadge.color}40` }}
             >
               {statusBadge.icon} {statusBadge.text}
             </span>
@@ -48,17 +68,53 @@ function WeekIndicator({ selectedDateKey }) {
         
         <div className="week-details">
           <span className="week-name">{weekInfo.name}</span>
-          <span className="week-description">{weekInfo.description}</span>
+          {statusBadge?.subtext && (
+            <span className="week-subtext">{statusBadge.subtext}</span>
+          )}
+          <span className="week-range">
+            {weekInfo.startDate === weekInfo.endDate 
+              ? weekInfo.startDate
+              : `${weekInfo.startDate} → ${weekInfo.endDate}`
+            }
+          </span>
+        </div>
+      </div>
+
+      {/* Next Classes Info */}
+      <div className="next-classes-section">
+        <div className="next-classes-title">📚 Upcoming Classes</div>
+        <div className="next-classes-grid">
+          {daysUntilANN && daysUntilANN.days >= 0 && (
+            <div className="next-class-item">
+              <span className="class-name">ANN</span>
+              <span className="class-days">
+                {daysUntilANN.days === 0 ? 'Today!' : `${daysUntilANN.days}d`}
+              </span>
+              <span className="class-date">{daysUntilANN.date.slice(5)}</span>
+            </div>
+          )}
+          {daysUntilCSP && daysUntilCSP.days >= 0 && (
+            <div className="next-class-item">
+              <span className="class-name">CSP</span>
+              <span className="class-days">
+                {daysUntilCSP.days === 0 ? 'Today!' : `${daysUntilCSP.days}d`}
+              </span>
+              <span className="class-date">{daysUntilCSP.date.slice(5)}</span>
+            </div>
+          )}
+          {daysUntilML && daysUntilML.days >= 0 && (
+            <div className="next-class-item">
+              <span className="class-name">ML</span>
+              <span className="class-days">
+                {daysUntilML.days === 0 ? 'Today!' : `${daysUntilML.days}d`}
+              </span>
+              <span className="class-date">{daysUntilML.date.slice(5)}</span>
+            </div>
+          )}
         </div>
       </div>
       
       <div className="week-meta">
-        {daysRemaining !== null && daysRemaining >= 0 && (
-          <span className="days-remaining">
-            {daysRemaining === 0 ? "Last day of week!" : `${daysRemaining} day${daysRemaining !== 1 ? 's' : ''} remaining`}
-          </span>
-        )}
-        
         <div className="trimester-progress">
           <div className="progress-bar">
             <div 

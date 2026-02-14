@@ -18,24 +18,146 @@ export const courses = {
   t1Backlog: [],
 };
 
-// Week definitions: Each week runs Saturday to Friday
-// Friday's live class concludes the week, Saturday starts the new week
+// Week definitions: Each academic week runs FRIDAY to SATURDAY
+// Friday: ANN (6:30 PM) + CSP (9:00 PM) - Week Start
+// Saturday: ML (7:45 PM) - Week End
+// Example: Week 4 = Feb 13 (Fri) + Feb 14 (Sat)
 export const weekDefinitions = [
-  { weekNum: 0, name: "Week 0 - Orientation", startDate: "2026-01-19", endDate: "2026-01-22", description: "Courses Live on LMS" },
-  { weekNum: 1, name: "Week 1", startDate: "2026-01-23", endDate: "2026-01-29", description: "Classes: Jan 23 (Fri), Jan 24 (Sat)" },
-  { weekNum: 2, name: "Week 2", startDate: "2026-01-30", endDate: "2026-02-05", description: "Classes: Jan 30 (Fri), Jan 31 (Sat)" },
-  { weekNum: 3, name: "Week 3", startDate: "2026-02-06", endDate: "2026-02-12", description: "Classes: Feb 6 (Fri), Feb 7 (Sat)" },
-  { weekNum: 4, name: "Week 4 - Quiz 1", startDate: "2026-02-13", endDate: "2026-02-19", description: "Graded Quiz-1: Feb 8-10 | Classes: Feb 13-14" },
-  { weekNum: 5, name: "Week 5", startDate: "2026-02-20", endDate: "2026-02-26", description: "Classes: Feb 20-21" },
-  { weekNum: 6, name: "Week 6", startDate: "2026-02-27", endDate: "2026-03-05", description: "Classes: Feb 27-28" },
-  { weekNum: 7, name: "Week 7 - Quiz 2", startDate: "2026-03-06", endDate: "2026-03-12", description: "Graded Quiz-2: Mar 1-3 | Classes: Mar 6-7" },
-  { weekNum: 8, name: "Week 8", startDate: "2026-03-13", endDate: "2026-03-19", description: "Classes: Mar 13-14" },
-  { weekNum: 9, name: "Week 9 - Assignment", startDate: "2026-03-20", endDate: "2026-03-26", description: "Assignment starts Mar 15 | Classes: Mar 20-21" },
-  { weekNum: 10, name: "Week 10 - Quiz 3", startDate: "2026-03-27", endDate: "2026-04-02", description: "Graded Quiz-3: Mar 22-24 | Classes: Mar 27-28" },
-  { weekNum: 11, name: "Week 11", startDate: "2026-04-03", endDate: "2026-04-09", description: "Classes: Apr 3-4" },
-  { weekNum: 12, name: "Week 12", startDate: "2026-04-10", endDate: "2026-04-16", description: "Classes: Apr 10-11 | Assignment Due: Apr 12" },
-  { weekNum: 13, name: "Week 13", startDate: "2026-04-17", endDate: "2026-04-23", description: "Classes: Apr 17-18" },
-  { weekNum: 14, name: "Week 14 - Exams", startDate: "2026-04-24", endDate: "2026-05-03", description: "Trimester Exams: Apr 25, May 2-3" },
+  { 
+    weekNum: 0, 
+    name: "Week 0 - Orientation", 
+    startDate: "2026-01-19", 
+    endDate: "2026-01-22", 
+    fridayDate: null,
+    saturdayDate: null,
+    description: "Courses Live on LMS (Jan 19)"
+  },
+  { 
+    weekNum: 1, 
+    name: "Week 1", 
+    startDate: "2026-01-23", 
+    endDate: "2026-01-24",
+    fridayDate: "2026-01-23",
+    saturdayDate: "2026-01-24",
+    description: "Fri: ANN+CSP | Sat: ML"
+  },
+  { 
+    weekNum: 2, 
+    name: "Week 2", 
+    startDate: "2026-01-30", 
+    endDate: "2026-01-31",
+    fridayDate: "2026-01-30",
+    saturdayDate: "2026-01-31",
+    description: "Fri: ANN+CSP | Sat: ML"
+  },
+  { 
+    weekNum: 3, 
+    name: "Week 3", 
+    startDate: "2026-02-06", 
+    endDate: "2026-02-07",
+    fridayDate: "2026-02-06",
+    saturdayDate: "2026-02-07",
+    description: "Fri: ANN+CSP | Sat: ML"
+  },
+  { 
+    weekNum: 4, 
+    name: "Week 4 - Quiz 1", 
+    startDate: "2026-02-08", 
+    endDate: "2026-02-14",
+    fridayDate: "2026-02-13",
+    saturdayDate: "2026-02-14",
+    description: "Quiz: Feb 8-10 | Fri: ANN+CSP | Sat: ML"
+  },
+  { 
+    weekNum: 5, 
+    name: "Week 5", 
+    startDate: "2026-02-20", 
+    endDate: "2026-02-21",
+    fridayDate: "2026-02-20",
+    saturdayDate: "2026-02-21",
+    description: "Fri: ANN+CSP | Sat: ML"
+  },
+  { 
+    weekNum: 6, 
+    name: "Week 6", 
+    startDate: "2026-02-27", 
+    endDate: "2026-02-28",
+    fridayDate: "2026-02-27",
+    saturdayDate: "2026-02-28",
+    description: "Fri: ANN+CSP | Sat: ML"
+  },
+  { 
+    weekNum: 7, 
+    name: "Week 7 - Quiz 2", 
+    startDate: "2026-03-01", 
+    endDate: "2026-03-07",
+    fridayDate: "2026-03-06",
+    saturdayDate: "2026-03-07",
+    description: "Quiz: Mar 1-3 | Fri: ANN+CSP | Sat: ML"
+  },
+  { 
+    weekNum: 8, 
+    name: "Week 8", 
+    startDate: "2026-03-13", 
+    endDate: "2026-03-14",
+    fridayDate: "2026-03-13",
+    saturdayDate: "2026-03-14",
+    description: "Fri: ANN+CSP | Sat: ML"
+  },
+  { 
+    weekNum: 9, 
+    name: "Week 9 - Assignment", 
+    startDate: "2026-03-15", 
+    endDate: "2026-03-21",
+    fridayDate: "2026-03-20",
+    saturdayDate: "2026-03-21",
+    description: "Assign starts Mar 15 | Fri: ANN+CSP | Sat: ML"
+  },
+  { 
+    weekNum: 10, 
+    name: "Week 10 - Quiz 3", 
+    startDate: "2026-03-22", 
+    endDate: "2026-03-28",
+    fridayDate: "2026-03-27",
+    saturdayDate: "2026-03-28",
+    description: "Quiz: Mar 22-24 | Fri: ANN+CSP | Sat: ML"
+  },
+  { 
+    weekNum: 11, 
+    name: "Week 11", 
+    startDate: "2026-04-03", 
+    endDate: "2026-04-04",
+    fridayDate: "2026-04-03",
+    saturdayDate: "2026-04-04",
+    description: "Fri: ANN+CSP | Sat: ML"
+  },
+  { 
+    weekNum: 12, 
+    name: "Week 12", 
+    startDate: "2026-04-10", 
+    endDate: "2026-04-12",
+    fridayDate: "2026-04-10",
+    saturdayDate: "2026-04-11",
+    description: "Fri: ANN+CSP | Sat: ML | Assign Due: Apr 12"
+  },
+  { 
+    weekNum: 13, 
+    name: "Week 13", 
+    startDate: "2026-04-17", 
+    endDate: "2026-04-18",
+    fridayDate: "2026-04-17",
+    saturdayDate: "2026-04-18",
+    description: "Fri: ANN+CSP | Sat: ML"
+  },
+  { 
+    weekNum: 14, 
+    name: "Week 14 - Exams", 
+    startDate: "2026-04-24", 
+    endDate: "2026-05-03",
+    fridayDate: null,
+    saturdayDate: "2026-04-25",
+    description: "Exams: Apr 25, May 2-3"
+  },
 ];
 
 // Helper to get week info for a specific date
@@ -74,30 +196,67 @@ export function getCurrentWeek() {
   return getWeekForDate(dateStr);
 }
 
-// Helper to check if a date is a Friday (week concluding day)
-export function isWeekConcludingDay(dateStr) {
-  const date = new Date(dateStr);
-  return date.getDay() === 5; // Friday = 5
-}
-
-// Helper to check if a date is a Saturday (week starting day)
-export function isWeekStartingDay(dateStr) {
-  const date = new Date(dateStr);
-  return date.getDay() === 6; // Saturday = 6
-}
-
-// Get days remaining in current week
-export function getDaysRemainingInWeek(dateStr) {
+// Helper to check if a date is a Friday (ANN + CSP day - Week Start)
+export function isFridayClassDay(dateStr) {
   const week = getWeekForDate(dateStr);
-  if (!week || week.weekNum < 0) return null;
+  if (!week || week.weekNum < 0) return false;
+  return dateStr === week.fridayDate;
+}
+
+// Helper to check if a date is a Saturday (ML day - Week End)
+export function isSaturdayClassDay(dateStr) {
+  const week = getWeekForDate(dateStr);
+  if (!week || week.weekNum < 0) return false;
+  return dateStr === week.saturdayDate;
+}
+
+// Helper to get the next class dates for each course
+export function getNextClassDates(fromDateStr) {
+  const fromDate = new Date(fromDateStr);
+  const scheduleDates = Object.keys(scheduleByDate).sort();
   
-  const currentDate = new Date(dateStr);
-  const weekEnd = new Date(week.endDate);
+  let nextANN = null;
+  let nextCSP = null;
+  let nextML = null;
   
-  const diffTime = weekEnd - currentDate;
+  for (const dateStr of scheduleDates) {
+    const date = new Date(dateStr);
+    if (date < fromDate) continue;
+    
+    const events = scheduleByDate[dateStr];
+    for (const event of events) {
+      if (event.type === 'live-class') {
+        if (event.title.includes('Artificial Neural Networks') && !nextANN) {
+          nextANN = dateStr;
+        }
+        if (event.title.includes('Cloud Services') && !nextCSP) {
+          nextCSP = dateStr;
+        }
+        if (event.title.includes('Machine Learning') && !nextML) {
+          nextML = dateStr;
+        }
+      }
+    }
+    
+    if (nextANN && nextCSP && nextML) break;
+  }
+  
+  return { nextANN, nextCSP, nextML };
+}
+
+// Get days remaining until next class
+export function getDaysUntilNextClass(fromDateStr, courseType) {
+  const nextClasses = getNextClassDates(fromDateStr);
+  const targetDate = nextClasses[courseType];
+  
+  if (!targetDate) return null;
+  
+  const from = new Date(fromDateStr);
+  const to = new Date(targetDate);
+  const diffTime = to - from;
   const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
   
-  return diffDays;
+  return { date: targetDate, days: diffDays };
 }
 
 // Schedule events organized by date (YYYY-MM-DD format)
@@ -114,7 +273,7 @@ export const scheduleByDate = {
     },
   ],
 
-  // Week 1 - Jan 23-24
+  // Week 1 - Jan 23-24 (Fri: ANN+CSP, Sat: ML)
   "2026-01-23": [
     {
       type: "live-class",
@@ -124,6 +283,7 @@ export const scheduleByDate = {
       endTime: "19:30",
       weightage: null,
       weekNum: 1,
+      dayType: "friday",
     },
     {
       type: "live-class",
@@ -133,6 +293,7 @@ export const scheduleByDate = {
       endTime: "22:00",
       weightage: null,
       weekNum: 1,
+      dayType: "friday",
     },
   ],
   "2026-01-24": [
@@ -144,6 +305,7 @@ export const scheduleByDate = {
       endTime: "20:45",
       weightage: null,
       weekNum: 1,
+      dayType: "saturday",
     },
   ],
 
@@ -157,6 +319,7 @@ export const scheduleByDate = {
       endTime: "19:30",
       weightage: null,
       weekNum: 2,
+      dayType: "friday",
     },
     {
       type: "live-class",
@@ -166,6 +329,7 @@ export const scheduleByDate = {
       endTime: "22:00",
       weightage: null,
       weekNum: 2,
+      dayType: "friday",
     },
   ],
   "2026-01-31": [
@@ -177,6 +341,7 @@ export const scheduleByDate = {
       endTime: "20:45",
       weightage: null,
       weekNum: 2,
+      dayType: "saturday",
     },
   ],
 
@@ -190,6 +355,7 @@ export const scheduleByDate = {
       endTime: "19:30",
       weightage: null,
       weekNum: 3,
+      dayType: "friday",
     },
     {
       type: "live-class",
@@ -199,6 +365,7 @@ export const scheduleByDate = {
       endTime: "22:00",
       weightage: null,
       weekNum: 3,
+      dayType: "friday",
     },
   ],
   "2026-02-07": [
@@ -210,10 +377,11 @@ export const scheduleByDate = {
       endTime: "20:45",
       weightage: null,
       weekNum: 3,
+      dayType: "saturday",
     },
   ],
 
-  // Week 4 - Graded Quiz 1 + Classes
+  // Week 4 - Feb 8-14 (Quiz + Classes Feb 13-14)
   "2026-02-08": [
     {
       type: "quiz",
@@ -249,9 +417,10 @@ export const scheduleByDate = {
       title: "Artificial Neural Networks",
       component: "Live Class Session",
       startTime: "18:30",
-      endDate: "19:30",
+      endTime: "19:30",
       weightage: null,
       weekNum: 4,
+      dayType: "friday",
     },
     {
       type: "live-class",
@@ -261,6 +430,7 @@ export const scheduleByDate = {
       endTime: "22:00",
       weightage: null,
       weekNum: 4,
+      dayType: "friday",
     },
   ],
   "2026-02-14": [
@@ -272,6 +442,7 @@ export const scheduleByDate = {
       endTime: "20:45",
       weightage: null,
       weekNum: 4,
+      dayType: "saturday",
     },
   ],
 
@@ -285,6 +456,7 @@ export const scheduleByDate = {
       endTime: "19:30",
       weightage: null,
       weekNum: 5,
+      dayType: "friday",
     },
     {
       type: "live-class",
@@ -294,6 +466,7 @@ export const scheduleByDate = {
       endTime: "22:00",
       weightage: null,
       weekNum: 5,
+      dayType: "friday",
     },
   ],
   "2026-02-21": [
@@ -305,6 +478,7 @@ export const scheduleByDate = {
       endTime: "20:45",
       weightage: null,
       weekNum: 5,
+      dayType: "saturday",
     },
   ],
 
@@ -318,6 +492,7 @@ export const scheduleByDate = {
       endTime: "19:30",
       weightage: null,
       weekNum: 6,
+      dayType: "friday",
     },
     {
       type: "live-class",
@@ -327,6 +502,7 @@ export const scheduleByDate = {
       endTime: "22:00",
       weightage: null,
       weekNum: 6,
+      dayType: "friday",
     },
   ],
   "2026-02-28": [
@@ -338,10 +514,11 @@ export const scheduleByDate = {
       endTime: "20:45",
       weightage: null,
       weekNum: 6,
+      dayType: "saturday",
     },
   ],
 
-  // Week 7 - Graded Quiz 2 + Classes
+  // Week 7 - Mar 1-7 (Quiz + Classes Mar 6-7)
   "2026-03-01": [
     {
       type: "quiz",
@@ -380,6 +557,7 @@ export const scheduleByDate = {
       endTime: "19:30",
       weightage: null,
       weekNum: 7,
+      dayType: "friday",
     },
     {
       type: "live-class",
@@ -389,6 +567,7 @@ export const scheduleByDate = {
       endTime: "22:00",
       weightage: null,
       weekNum: 7,
+      dayType: "friday",
     },
   ],
   "2026-03-07": [
@@ -400,6 +579,7 @@ export const scheduleByDate = {
       endTime: "20:45",
       weightage: null,
       weekNum: 7,
+      dayType: "saturday",
     },
   ],
 
@@ -413,6 +593,7 @@ export const scheduleByDate = {
       endTime: "19:30",
       weightage: null,
       weekNum: 8,
+      dayType: "friday",
     },
     {
       type: "live-class",
@@ -422,6 +603,7 @@ export const scheduleByDate = {
       endTime: "22:00",
       weightage: null,
       weekNum: 8,
+      dayType: "friday",
     },
   ],
   "2026-03-14": [
@@ -433,10 +615,11 @@ export const scheduleByDate = {
       endTime: "20:45",
       weightage: null,
       weekNum: 8,
+      dayType: "saturday",
     },
   ],
 
-  // Week 9 - Assignment + Classes
+  // Week 9 - Mar 15-21 (Assignment + Classes Mar 20-21)
   "2026-03-15": [
     {
       type: "assignment",
@@ -478,6 +661,7 @@ export const scheduleByDate = {
       endTime: "19:30",
       weightage: null,
       weekNum: 9,
+      dayType: "friday",
     },
     {
       type: "live-class",
@@ -487,6 +671,7 @@ export const scheduleByDate = {
       endTime: "22:00",
       weightage: null,
       weekNum: 9,
+      dayType: "friday",
     },
   ],
   "2026-03-21": [
@@ -498,10 +683,11 @@ export const scheduleByDate = {
       endTime: "20:45",
       weightage: null,
       weekNum: 9,
+      dayType: "saturday",
     },
   ],
 
-  // Week 10 - Graded Quiz 3
+  // Week 10 - Mar 22-28 (Quiz + Classes Mar 27-28)
   "2026-03-22": [
     {
       type: "quiz",
@@ -540,6 +726,7 @@ export const scheduleByDate = {
       endTime: "19:30",
       weightage: null,
       weekNum: 10,
+      dayType: "friday",
     },
     {
       type: "live-class",
@@ -549,6 +736,7 @@ export const scheduleByDate = {
       endTime: "22:00",
       weightage: null,
       weekNum: 10,
+      dayType: "friday",
     },
   ],
   "2026-03-28": [
@@ -560,6 +748,7 @@ export const scheduleByDate = {
       endTime: "20:45",
       weightage: null,
       weekNum: 10,
+      dayType: "saturday",
     },
   ],
 
@@ -573,6 +762,7 @@ export const scheduleByDate = {
       endTime: "19:30",
       weightage: null,
       weekNum: 11,
+      dayType: "friday",
     },
     {
       type: "live-class",
@@ -582,6 +772,7 @@ export const scheduleByDate = {
       endTime: "22:00",
       weightage: null,
       weekNum: 11,
+      dayType: "friday",
     },
   ],
   "2026-04-04": [
@@ -593,10 +784,11 @@ export const scheduleByDate = {
       endTime: "20:45",
       weightage: null,
       weekNum: 11,
+      dayType: "saturday",
     },
   ],
 
-  // Week 12 - Apr 10-11
+  // Week 12 - Apr 10-12
   "2026-04-10": [
     {
       type: "live-class",
@@ -606,6 +798,7 @@ export const scheduleByDate = {
       endTime: "19:30",
       weightage: null,
       weekNum: 12,
+      dayType: "friday",
     },
     {
       type: "live-class",
@@ -615,6 +808,7 @@ export const scheduleByDate = {
       endTime: "22:00",
       weightage: null,
       weekNum: 12,
+      dayType: "friday",
     },
   ],
   "2026-04-11": [
@@ -626,6 +820,7 @@ export const scheduleByDate = {
       endTime: "20:45",
       weightage: null,
       weekNum: 12,
+      dayType: "saturday",
     },
   ],
 
@@ -652,6 +847,7 @@ export const scheduleByDate = {
       endTime: "19:30",
       weightage: null,
       weekNum: 13,
+      dayType: "friday",
     },
     {
       type: "live-class",
@@ -661,6 +857,7 @@ export const scheduleByDate = {
       endTime: "22:00",
       weightage: null,
       weekNum: 13,
+      dayType: "friday",
     },
   ],
   "2026-04-18": [
@@ -672,10 +869,11 @@ export const scheduleByDate = {
       endTime: "20:45",
       weightage: null,
       weekNum: 13,
+      dayType: "saturday",
     },
   ],
 
-  // Week 14 - Trimester Exams Slot 1
+  // Week 14 - Exams Apr 25, May 2-3
   "2026-04-25": [
     {
       type: "exam",
@@ -697,7 +895,6 @@ export const scheduleByDate = {
     },
   ],
 
-  // Week 14 - Trimester Exams Slot 2
   "2026-05-02": [
     {
       type: "exam",
